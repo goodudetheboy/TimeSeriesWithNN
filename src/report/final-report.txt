@@ -1,0 +1,28 @@
+0. Abstract
+    For the final project of CSC240, we look to apply deep learning techniques in the subject of time series analysis and analyze its performance in this type of task, and possibly compare their accuracy against autoregressive methods, which are algorithms specially developed for time series data. Specifically, we look at whether neural networks can be applied in the financial sectors by using a variety of networks such as bidirectional RNN, GRU, and LSTM to predict future prices of Microsoft stocks, Bitcoin, and similar datasets with varying level of features. We have also prepared and generated artificial time series datasets that simulates reality to see how deep learning can be applied in this kind of task. We find that the all four of the networks we experimented with perform relatively well on our datasets, and that there are some networks that perform better at one dataset than the other. 
+
+
+1. Introduction
+    a. Briefly about time series
+        Oxford Languages defines "time series" to be "a series of values of a quantity obtained at successive times, often with equal intervals between them"[1], and in mathematics, a time series is "a series of data points indexed (or listed or graphed) in time order"[2]. Definition asides, time series data appears in every part of our life. From every day's temperature and rain level in the East Coast of the United States, to the stock price of AAPL or Ethereum fluctuating every time the market opens, each and everyone of us have seen and directly experienced this type of data. Interested in this simple-sounding yet difficult to understand, for our final project we decide to analyze time series, and specifically, time series prediction.
+        
+    b. Time series prediction and analysis
+        People have always wanted to see and predict the future. Looking at a chart of time series data, it is inevitable that each one of us has wondered at least once about what tomorrow will be like. How will the data behave? Will it go up, or will it go down? Having the ability to predict future would be great! We would be able to know about what tomorrow's temperature will be during our picnic trip, or whether this cryptocurrency that we have invested our entire life savings in will make us appear in the next Forbes 30 under 30, or will it just pull us deeper in the red. However, accurately predicting the future is an impossible thing to do, but with the power of mathematics, we can at least make an educated guess.
+        
+        Predicting the future is not just for getting rich quick in the stock market; but rather, time series prediction can help researcher in the medical field predict the number of traumas of each person[3], or hospitals in Southern Taiwan to forecast emergency visits[4], or farmers in Iddukki district, Kerala to predict rainfalls [5]. Due to it varying use in all fields, the subject of time series forecasting is widely researched, all the way back in the later half of 20th century, with many algorithms having been developed, and widely used, for this kind of task, most notably autoregressive methods.
+
+    c. Deep learning in time series forecasting
+        With autoregerssive methods seem to be the go-to algorithms for this task, our team decides to take a step back and approach this problem in a different way: using deep learning. For our final project, we are interested in seeing whether deep learning algorithms can be used for the price prediction task in financial datasets, the extent of which some techniques can be used and their effectiveness, and how well they work in both real-life time series dataset and artificial ones.
+
+2. Literature Review
+3. Methods
+4. Theoretical Topic
+5. Data Application
+6. Results
+7. Division of Labor
+
+[1] Oxford Languages
+[2] https://en.wikipedia.org/wiki/Time_series
+[3] https://www.researchgate.net/publication/334960185_Predicting_number_of_traumas_using_the_seasonal_time_series_model
+[4] https://pubmed.ncbi.nlm.nih.gov/29196487/
+[5] https://www.researchgate.net/publication/328495188_Time-series_Analysis_and_Forecasting_of_Rainfall_at_Idukki_district_Kerala_Machine_Learning_Approach
