@@ -53,7 +53,6 @@ def train(train_loader, test_loader, learn_rate, network, model_type, batch_size
     for epoch in range(1,EPOCHS+1):
         start_time = time.perf_counter()
         h = model.init_hidden(batch_size)
-        print(h.type)
         avg_loss = 0.
         for x, label in train_loader:
             h = h.data
