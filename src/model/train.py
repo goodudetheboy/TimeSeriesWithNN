@@ -97,7 +97,7 @@ def train(train_loader, test_loader, learn_rate, network, model_type, batch_size
             values.append(label.numpy().reshape(-1))
             
         test_loss.append(avg_loss2)
-        print("Total Testing MSELoss: {}".format(avg_loss2))
+        print("Total Testing {} Loss: {}".format(loss_func.upper(), avg_loss2))
         
         current_time = time.perf_counter()
         epoch_times.append(current_time-start_time)
