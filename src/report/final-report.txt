@@ -144,13 +144,38 @@
         \end{tabular}
 
         According to the table shown above, backpropagation using the MSE loss function generally has better performance than using the L1 loss function. This phenomenon can be explained by the fact that MSE loss is based on the probabilistic assumption of a Gaussian distribution and that financial data is approximately following a normal distribution. 
-            Since the nature of RNN model is drawing insights from the data itself by mathematical calculations, as expected, our model can well predict the two artificial datasets, with total testing MSE loss of 0.00112 and 0.00405 respectively. As shown in the graphs, the prediction and the actual data lines almost always overlap each other.  
+    
+        Since the nature of RNN model is drawing insights from the data itself by mathematical calculations, as expected, our model can well predict the two artificial datasets, with total testing MSE loss of 0.00112 and 0.00405 respectively. As shown in the graphs, the prediction and the actual data lines almost always overlap each other.  
+    
         The implementation on the four real financial data is also successful with the total testing MSE loss ranging from 0.00401 to 0.204 across different datasets. The total testing MSE loss of the S&P 500 dataset is the largest. According to the prediction and actuals comparison graph, we can see that our model can catch the general trend as well as the fluctuations of the dataset, but it keeps underestimating the values as shown in the gap between the two lines. Similar issues also appear in other financial datasets: for example, the crude oil price prediction overestimates the trough values while underestimates the peak values, and the bitcoin price prediction underestimates the peak values at the time steps 400-600. The failure may be due to the fact that financial data is not perfectly normal but a normal-like distribution with fat tails, which means the real-life financial data will have more extreme values than mathematical tools predict based on probabilities. Looking at the original S&P 500 price graph, the market demonstrates a relatively constant state from 1871 to 1971, while it dramatically increases after that. It would be difficult for the model to predict the extreme increase based on the relatively stable historical trend. 
 
 
     b. Bidirectional RNN
-        
+        \begin{tabular}{lllll}
+            \toprule
+            Bidirectional RNN	&          MSE &   	&           L1 & 		\\
+            \midrule
+                                &     Training &      Testing &     Training &    Testing \\
+            Artificial Dataset 1 &  0.001596 &  0.0013673 &    0.0208957 &  0.035822 \\
+            Artificial Dataset 2 &  0.00019866 &   0.0030743 &     0.035325 &  0.0331284 \\
+            Microsoft stock price &   0.00019866 &  0.0008362 &   0.00740934 &  0.0540353 \\
+                Crude oil price &   0.00120862 &    0.00812 &    0.02531 &  0.143351 \\
+                    S\&P 500 Index &  6.157614e-06 &   0.038199 &  0.010366 &  0.56455 \\
+                    Bitcoin price &  2.01082e-05 &  0.00068188 &    0.006529 &  0.0896484 \\
+            \bottomrule
+        \end{tabular}
 
+        As expected, bidirectional RNN performs quite better than the traditional RNN, at least with real-world datasets. While the final MSE and L1 loss of BRNN detailed above for Artificial Dataset 1 and 2 are close and some may be a bit higher than that of RNN, the performance of BRNN is much better at real dataset. BRNN performs significantly better than RNN at predicting Microsoft stock prices and Bitcoin price, with the testing MSE loss of BRNN in predicting Bitcoin prices at 0.00068188, almost 5 times smaller than that of RNN, at 0.004013. However, it should be noted that the peformance of BRNN and RNN are quite identical in the the crude oil prices, with the testing MSE Loss in predicting oil prices of BRNN at 0.00812 being a bit higher than that of RNN, at 0.006365.
+
+        From observing the predicted values versus actual graph of S&P 500 Index for BRNN, we observe equally bad result as that predicted by RNN. The predicted trend line seems to be overestimatingly decreasing and increasing compared to the actual trend lines, as seen from the graph below:
+
+        (graph of S&P 500 trend line)
+
+        As observed, whenever there is a slight decrease or increase in actual trend, BRNN seems to be sharply making the turn, as seen in the 75th, 150th, 250th, and 325th time points. Despite the loss converging and the low final testing MSE loss (0.038199), the results for S&P 500 in observation is quite unsatisfying. This might be because the nature the S&P 500's trend: there are a very long period of plateau before sharply increasing and decreasing, which BRNN interprets that whenever there is a increase, it should do so sharply. What is surprising to us is that BRNN works well with the Bitcoin prices data, even though the trend line of Bitcoin is very similar to that of S&P 500's, with period of plateau followed by a series of sharp spikes (see graph)
+        
+        (bitcoin trend line)
+
+        Taking a closer look, the reason why BRNN predicts better at Bitcoin despite trend similarity to S&P 500, is because there are moderate period between the two spikes in the Bitcoin, while the spikes in S&P 500 happens back-to-back, which BRNN was able to smooth out its increase and decreases from.
 
     c. GRU
         \begin{tabular}{lllll}
@@ -170,10 +195,60 @@
         For the two artificial datasets, GRU achieved a MSE loss around 0.0003 on the training set and below 0.01 on the testing set; also achieved a L1 loss around 0.01 on the training set and around 0.03 on the testing set. The two loss functions for both datasets converged within 5 epochs and GRU perfectly catched all the trends and peaks. MSE loss also converged within 5 epochs for the Microsoft stock price dataset; the losses for training set and testing set are below 0.001. There was some fluctuation for L1 loss, but ultimately it achieved 0.007 for the training dataset and 0.035 for the testing set. The prediction showed some degree of delay especially when it came to the second half of the series. GRU outperformed on the S&P 500 Index dataset with a MSE loss of near to zero on the training set and 0.002 on the testing set, and the L1 loss confirmed the performance. The prediction did not show any delay and catched every trend and peak (Figure ?), which is very impressive. For the crude oil price dataset, some deviation appeared at the beginning and the end of the series with MSE loss and L1 loss below 0.1. Although both loss functions converged within 10 epochs for the Bitcoin price dataset, using MSE loss function for backpropagation resulted in a lower loss on both training set and testing set. It also successfully predicted the extreme peak at the end of the series. Therefore, overall GRU was effectively applied to financial time-series data and had the best performance on all datasets compared to other models.
 
     d. LSTM
-        The LSTM model is expected to perform best compared with other model in theory as it could use both information from long and short term when outputting the prediction. Throughout the testing with datasets, we could see the usual common thing is that both test and train loss decrease over time which signals that our model for LSTM is not in overfitting issue. But for the cases when having dataset with extreme increase suddenly in their values, the model fails to capture that successfully. On the other hand, the LSTM seems to do very well on artificial dataset and the ones that don’t have sudden big change in their values throughout time. It could just capture the shape slightly but not to what we expect. The train and test overall have some volatile shape in their plots at some points before the convergence. The other concern might come from the fact that the RNN type layer in Pytorch is experiencing some non-deterministic behavior when using CUDA to change and it might cause some unstable incidents during the training time.
+        \begin{tabular}{lllll}
+            \toprule
+                        LSTM	&          MSE &   	&           L1 & 		\\
+            \midrule
+                                &     Training &      Testing &     Training &    Testing \\
+            Artificial Dataset 1 &  0.00060739 &  0.00010624 &    0.01689459 &  0.005836 \\
+            Artificial Dataset 2 &  0.000529 &   0.0018777 &     0.01656156 &  0.0312243 \\
+            Microsoft stock price &   6.46373e-05 &  0.0015584 &   0.00786242 &  0.025047 \\
+                Crude oil price &   0.0031855 &   0.0124008 &    0.062267 &  0.127096 \\
+                    S\&P 500 Index &  5.22111e-05 &   0.158363 &    0.0087754 &  0.059322 \\
+                    Bitcoin price &  0.00017662 &   0.430384 &  0.00356 &  0.066288  \\
+            \bottomrule
+        \end{tabular}
+
+        The LSTM model is expected to perform best compared with other model in theory as it could use both information from long and short term when outputting the prediction. Throughout the testing with datasets, we could see the usual common thing is that both test and train loss decrease over time which signals that our model for LSTM is not in overfitting issue. But for the cases when having dataset with extreme increase suddenly in their values, the model fails to capture that successfully. On the other hand, the LSTM seems to do very well on artificial dataset and the ones that don’t have sudden big change in their values throughout time. It could just capture the shape slightly but not to what we expect. The train and test overall have some volatile shape in their plots at some points before the convergence.
 
 
 7. Division of Labor
+    The work of this project was split evenly between the team members. We will be elaborating the division of labor in each stage of this final project by providing a table of who did what in the following sections:
+
+    a. Prospectus
+        We first need to analyze our datasets to pull out statistics and some general trends. The table below shows who are responsible for the dataset analysis
+
+            Team member(s) & Dataset\\
+            Quianwen and Chuqin & Microsoft stock prices and S&P 500 Index\\
+            Vuong and Minh Khoi & Crude oil prices and Bitcoin prices
+    
+        The team member responsible for compiling information and writing the prospectus was Vuong.
+
+    b. Presentation
+        \subsubsection{Neural network implementation} We have split up the four neural networks implementation responsiblity as detailed in the following table:
+            \begin{table}[h!] \centering
+                \caption{Datasets }
+                \begin{threeparttable}
+                        \begin{tabular}{|c|c|}
+                            \hline
+                            Neural Network Name & Implementer\\
+                            \hline
+                            Traditional RNN & Qianwen\\
+                            Bidirectional RNN & Vuong\\
+                            GRU & Chuqin\\
+                            LSTM & Minh Khoi\\
+                            \hline
+                        \end{tabular}
+                \end{threeparttable}
+            \end{table}
+
+        Each person was also responsible for applying their implementation to the datasets, as well as conducting analysis on the results. With their results, each person went ahead and write up their own report and analysis, which was be pieced together in the presentation.
+
+        The presentation was compiled from the four report and graphs of each team members, and all four members contributed to the slides, whether content or design.
+
+    c. Final report
+        Similar to the presentation, each team member was responsible for their own report of their assigned neural network. The final report was put together in LaTeX by Vuong.
+
 
 [1] Oxford Languages
 [2] https://en.wikipedia.org/wiki/Time_series
