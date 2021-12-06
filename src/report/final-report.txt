@@ -12,9 +12,20 @@
         Predicting the future is not just for getting rich quick in the stock market; but rather, time series prediction can help researcher in the medical field predict the number of traumas of each person[3], or hospitals in Southern Taiwan to forecast emergency visits[4], or farmers in Iddukki district, Kerala to predict rainfalls [5]. Due to it varying use in all fields, the subject of time series forecasting is widely researched, all the way back in the later half of 20th century, with many algorithms having been developed, and widely used, for this kind of task, most notably autoregressive methods.
 
     c. Deep learning in time series forecasting
-        With autoregerssive methods seem to be the go-to algorithms for this task, our team decides to take a step back and approach this problem in a different way: using deep learning. For our final project, we are interested in seeing whether deep learning algorithms can be used for the price prediction task in financial datasets, the extent of which some techniques can be used and their effectiveness, and how well they work in both real-life time series dataset and artificial ones.
+        With autoregerssive methods seem to be the go-to algorithms for this task, our team decides to take a step back and approach this problem in a different way: using deep learning. Consider that the task of time series prediction is taking an input of time series data and output future price, this is the perfect task for a neural network to train on and perform predictions based on the trend learned from the training process. We noticed a specific type of neural network with structures very suitable for the tasks of learning from long series of data: recurrent neural network (RNN). With context of one state being included in the next state of the training process, we think that this would allow the RNN to pick up on historical trends, and from that give a good educated guess.
+
+        With that said, we are interested in seeing the performance of RNN and its variants in the price prediction task in financial datasets, the extent of which some techniques can be used and their effectiveness, and how well they work in both real-life time series dataset and artificial ones.
 
 2. Literature Review
+    The application of deep learning into the time series prediction is not novel: Brownlee (2018)[6] details on how to construct a deep learning network for this purpose using a wide variety of techniques including Multilayer Perceptrons, Convolutional Neural Networks, and Recurrent Neural Network to predict many different types of datasets, Gamboa (2017) explores similar approaches to time series dataset with deep learning [7], Qiu et al. (2014) proposes a deep learning belief networks for regression and time series forecasting and also experiments with support vector regression [8]. Deep learning in financial datasets has even been explored for over a decade, way back in 2005 by finance researchers in both the academic world and the industry [9], and many other in different fields, such as healthcare (Miotto et al. (2017) [10], Kaushik et al. (2020) [11], Purushotham et al. (2018)), agriculture (Guillén-Navarro et al. (2020) [13], Jin et al. (2020) [14], Atef et al. (2021) [16]), weather (Salman et al. (2015) [16], Hossain et al. (2015) [17])...
+
+    Individually, there has also been many papers individually look at the performance of each of the variant of RNN.
+    a) LSTM
+        Althelaya et al. (2018) [8] utilizes a bidirectional LSTM structure (a bidirectional LSTM being a two-way LSTM with information from hidden states taken in from both the the previous and the future states) to perform prediction on the S&P 500 Index, and finds that this structure perform well on the applied datasets, with final loss of 0.03247 with MAE (Mean Absolute Error) loss and 0.04211 with RMSE (Root-mean-square Deviation) loss. 
+
+    b) GRU
+        In research from Shen et al. (2018), a 3-layer GRU model with input layer of 240 timesteps and 25 hidden neurons has been implemented for multi-class classification. Its performance on the S&P 500 Index achieved an accuracy of 51.4%. The author confirmed that it is effective to use GRU to extract useful information from financial time-series data. Similarly, Dutta et al. implemented a simple GRU with 50 hidden neurons and one dense layer with one hidden neuron on the exact same Bitcoin price dataset. The size of the input layer depending on the lookback ranged from 15 to 60 days. The regression achieved a RMSE of 0.01 on the training set and 0.019 on the testing set. Therefore, these two studies proved that GRU is a valid method for learning and predicting non-linear patterns in the complex financial data. In addition, as Dey et al. (2021) pointed out in their comparison analysis of RNN in stock price prediction, besides outperforming the simple RNN, GRU even produced a better loss than LSTM especially when the lookback period gets shorter.
+
 3. Methods
 4. Theoretical Topic
 5. Data Application
@@ -26,3 +37,16 @@
 [3] https://www.researchgate.net/publication/334960185_Predicting_number_of_traumas_using_the_seasonal_time_series_model
 [4] https://pubmed.ncbi.nlm.nih.gov/29196487/
 [5] https://www.researchgate.net/publication/328495188_Time-series_Analysis_and_Forecasting_of_Rainfall_at_Idukki_district_Kerala_Machine_Learning_Approach
+[6] https://books.google.com/books?hl=en&lr=&id=o5qnDwAAQBAJ&oi=fnd&pg=PP1&dq=deep+learning+in+time+series+forecasting&ots=yH29xMvg2b&sig=wI2SuEDxZZG_VVhWIoTBVwPGMaQ#v=onepage&q=deep%20learning%20in%20time%20series%20forecasting&f=false
+[7] https://arxiv.org/abs/1701.01887
+[8] https://ieeexplore.ieee.org/abstract/document/7015739
+[9] https://www.sciencedirect.com/science/article/pii/S1568494620301216
+[10] https://doi.org/10.1093/bib/bbx044
+[11] https://doi.org/10.3389/fdata.2020.00004
+[12] https://doi.org/10.1016/j.jbi.2018.04.007
+[13] https://doi.org/10.3233/AIS-200546
+[14] https://doi.org/10.3390/s20051334
+[15] https://doi.org/10.1109/MWSCAS47672.2021.9531929
+[16] https://doi.org/10.1109/ICACSIS.2015.7415154
+[17] https://doi.org/10.1109/IJCNN.2015.7280812
+[18] https://ieeexplore.ieee.org/abstract/document/8355458 
