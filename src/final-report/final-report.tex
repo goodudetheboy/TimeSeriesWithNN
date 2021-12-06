@@ -26,8 +26,6 @@
 \usepackage{tabularx}
 \usepackage{subcaption}
 \usepackage{tablefootnote}
-\usepackage{custombib}
-\usepackage{natbib}
 
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \newcolumntype{L}{>{\raggedleft\arraybackslash}p{.2in}}
@@ -49,8 +47,6 @@
 \usepackage{multicol}
 \title{\LARGE
 \textbf{Price Prediction with Neural Networks:\\ Time Series Forecast meets Deep Learning}\\
-\Large
-\textit{Prospectus}\\
 \Large
 CSC 240 Final Project
 }
@@ -83,7 +79,7 @@ CSC 240 Final Project
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-For the final project of CSC240, we look to apply deep learning techniques in the subject of time series analysis and analyze its performance in this type of task, and possibly compare their accuracy against autoregressive methods, which are algorithms specially developed for time series data. Specifically, we look at whether neural networks can be applied in the financial sectors by using a variety of networks such as bidirectional RNN, GRU, and LSTM to predict future prices of Microsoft stocks, Bitcoin, and similar datasets. We have also prepared and generated artificial time series datasets that simulates reality to see how deep learning can be applied in this kind of task. Here in this prospectus, we discuss our plans to approach this final project.
+    For the final project of CSC240, we look to apply deep learning techniques in the subject of time series analysis and analyze its performance in this type of task, and possibly compare their accuracy against autoregressive methods, which are algorithms specially developed for time series data. Specifically, we look at whether neural networks can be applied in the financial sectors by using a variety of networks such as bidirectional RNN, GRU, and LSTM to predict future prices of Microsoft stocks, Bitcoin, and similar datasets with varying level of features. We have also prepared and generated artificial time series datasets that simulates reality to see how deep learning can be applied in this kind of task. We find that the all four of the networks we experimented with perform relatively well on our datasets, and that there are some networks that perform better at one dataset than the other. 
 
 \end{abstract}
 
@@ -227,7 +223,7 @@ In this section, we will elaborate how we will tackle the goal we have set out i
 
 \cite{PURUSHOTHAM2018112}
 
-\bibliographystyle{apalike}
+\bibliographystyle{unsrt}
 \bibliography{reference}
 
 \end{document}
