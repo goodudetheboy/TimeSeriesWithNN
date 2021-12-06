@@ -58,7 +58,75 @@
     d. Long-Short Term Memory (LSTM)
         The idea of LSTM is developed by Sepp et al. in 1997. Here, we refer use the modern paper to explain the mechanism of LSTM. The LSTM has one additional element comparing with the hidden state and it is the cell memory, so it could store both long-term and short-term information. There are three gates in the LSTM cells. They are input, forget, and output gates. The input gate decides how to handle the hidden state from previous cell and the input of the current cell. The output gate decides how to forward the information of the cell to next cell. The forget gate decides which information the cell could ignore and place more emphasis on more important ones. 
 
+4. Network Implementation
+    a. Traditional RNN
+        We implemented a 1-layer traditional RNN model with 64 hidden neurons on the six datasets by using PyTorch packages. The inputs are grouped in batches to facilitate the backpropagation process. For datasets with large numbers of samples - artificial 1, bitcoin, and artificial 2 datasets - we group them into 64 batches, while for Microsoft stock, crude oil, and S&P 500 stock datasets, we use 32 batches. To improve the robustness of our model and prevent overfitting, we used a dropout rate of 0.2 and the RELU activation function to train our model. Moreover, we did 50 epochs on the S&P 500 stock dataset and 20 epochs on the other datasets since the S&P 500 dataset needed more epochs to converge during backpropagation. 
+
+    b. Bidirectional RNN
+        The structure of the bidirectional RNN is very similar to the above traditional RNN, but with the RNN cell replaced with a bidirectional RNN cells. We also apply some changes in the internal linear output layers to take in double the hidden output size, since the output of the bidirectional RNN are doubled in size compared to the RNN. The internal bidirectional RNN cell contains 64 hidden layers. This neural network trains on 50 epoch at a learning rate of 0.001, with an input batch size of 32 or 64 based on sample size, and a lookback of 5 days. 
+
+    c. GRU
+        A one-layer GRU was implemented with an input size equal to the lookback of 5 days and 64 hidden neurons in one hidden state. One dense layer of linear function followed it to output the final prediction. Using the TensorDataset and DataLoader method from Pytorch, we transformed the data to tensor and separated them with different batch sizes 32 or 64 based on the sample size. With a learning rate of 0.001, the model was run separately using different loss functions for backpropagation to check the consistency of the prediction results.
+
+    d. LSTM
+        We develop LSTM model by Pytorch. We use the first LSTM layer with purpose on mapping input features to the first hidden features. Then we connect that to the second LSTM layer to map to the second hidden features. Then, we connect every feature at the end through a dense layer to output the next number of steps we want. We also initialize hidden states to zero to begin the training then keep propagating the hidden states to later training batches. With a learning rate of 0.001, the model was run separately using different loss functions for backpropagation to check the consistency of the prediction results. We output the loss of train and test set through the number of epochs to see general trend in training. We also plot the predicted values to compare with the test values to visualize that. We apply training, testing, and plotting for every dataset.
+
+    e. Loss Metric
+        We used two different loss functions, MSE and L1 (MAE), to do backpropagation and recorded the losses separately to compare the performances. Doing so, we believe, would result in a fairer comparison between the four networks, and it can also give us a more unbiased outlook into the analysis.
+
 5. Data Application
+        To test the performance of the four deep learning models we have listed above, we decide to use four financial datasets that come from three different fields, and also two more artificial datasets we generate with certain constraints. We prepare four real-life datasets which come from slightly different financial contexts, whose subfields and metadata we listed in the table below:
+
+        \begin{table}[h!] \centering
+            \caption{Datasets }
+            \begin{threeparttable}
+                    \begin{tabular}{|c||c|c|}
+                        \hline
+                        Dataset name & Field & Source\\
+                        \hline
+                        Microsoft Stock Prices & Stock market & Kaggle\tablefootnote{\url{https://www.kaggle.com/vijayvvenkitesh/microsoft-stock-time-series-analysis}}\\
+                        S\&P 500 Index & Stock market & DataHub\tablefootnote{\url{https://datahub.io/core/s-and-p-500}}\\
+                        Europe Crude Oil Prices & Natural resources & FRED Economic Data\tablefootnote{\url{https://fred.stlouisfed.org/series/DCOILBRENTEU}}\\
+                        Bitcoin Prices & Cryptocurrency & Kaggle\tablefootnote{\url{https://www.kaggle.com/sudalairajkumar/cryptocurrencypricehistory}}\\
+                        \hline
+                    \end{tabular}
+            \end{threeparttable}
+        \end{table}
+
+        With the four datasets belonging into slightly different subfields of the financial world, we can reliably compare our prediction accuracy of each models we use and apply our findings to generalize without biases. This following subsections detail some analysis on the above four datasets:
+
+        1. MSFT stock price: For this dataset, we decide to go with the close stock prices of Microsoft (MSFT on NASDAQ) from 2015-04-01 to 2021-03-3. Here we graph the values of Microsoft Stock prices over time in Fig. 1:
+
+        (MSFT Dataset trend)
+
+        As observed in the above trend, we can see that MSFT Stock prices experiences a general increase from 2015, with only small sudden decreases happening in 2018 and 2020. This dataset provides us with a generally increasing time series data, and we expect that our 4 models can easily pick up this forward trend and predict well in during their evaluation. 
+ 
+        2. S&P 500 Index: The Standard \& Poor 500 Index (S\&P 500) is a stock market index tracking the performance of 500 large companies listed on stock exchanges in the United States\footnote{Wikipedia}, and the dataset that we have contains index from 1871-01-01 to 2018-04-01. Here we graph the values of the S\&P 500 Index over time in Fig. 2:
+
+        (S&P500 Index trend)
+
+        The reason we chose this datasets is due to its special feature: it plateaus for quite a while from 1871 to 1987, before sharply increasing and decreasing over the next 40 years, and increasing rapidly when closer to current present. This feature is considerably different from what we observe in the MSFT stock price, where it is a general increase with small fluctuations, giving us another perspective to weigh in in our comparison.
+
+        3. Europe Crude Oil Prices: The dataset contains the crude oil prices (in USD) of Europe from 2015-11-02 to 2021-11-01. Here we graph the values of the Europe crude oil prices over time in Fig. 3:
+
+        (Crude oil prices trend)
+
+        This dataset contains even more different trend than the previous two, with high degree of fluctation with one period of sharp increase and one period of sharp decrease back-to-back, mixed with many fluctuating plateaus also. There are no general upward or downward trend to conclude definitively. With this high entropy, we expect the 4 methods to struggle quite a bit picking up trends in this datasets. 
+
+        4. Bitcoin Prices: The main dataset from Kaggle offer prices of many different cryptocurrency; however, we decided to go with Bitcoin since it seems to be the most popular one currently as of 2021. The dataset contains Bitcoin prices (in USD) at close from 2013-04-29 to 2021-07-06. Here we graph the values of the Bitcoin prices at close over time in Fig. 4:
+
+        (Bitcoin prices trend)
+
+        This dataset has somewhat similar trend to the S&P 500 one; however, after a period of plateau from 2013 to late 2016, it is followed by a small sharp increase, then followed by a small fluctuating plateau, for 2 years, then spiking again before dropping sharply again, while the S&P 500 contains two back-to-back series of spikes and decreases. We also expect the four methods to struggle on confidently picking up the trend as well, consider a quite unorthodox trend growth.
+
+    Besides the real-life datasets listed above, we have also created an algorithm that generated artificial time series dataset, and would apply our neural networks on two which will be created during the course of our final project. Fig 5 and 6 showcase two artificial datasets that were generated by our methods.
+
+    (artificial data, REMEMBER TO USE FROM OUR OWN, NOT FROM THE PROSPECTUS)
+
+    (artificial data, REMEMBER TO USE FROM OUR OWN, NOT FROM THE PROSPECTUS)
+
+    To generate an artificial time-series dataset, we firstly used the Pandas package to create a dataframe ranging from 2000-01-01 to 2021-12-31,  and random numbers generated by Numpy were assigned to the dataframe. Then, the seasonal decomposition method from statsmodels package was applied to the dataframe with a period of 365 days, resulting in trend, seasonality, and residual. The trend was calculated by moving averaging with a window length of 365, so the first half year and the last half year will disappear. We extracted the trend data as our final artificial dataset since it is more similar to the normal financial time-series data. A total of 7307 timesteps was generated.
+
 6. Results
 7. Division of Labor
 
