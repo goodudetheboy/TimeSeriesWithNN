@@ -135,10 +135,11 @@ CSC 240 Final Project
 
     \subsection{Gated Recurrent Unit (GRU)}
         GRU is a gating mechanism developed from RNN by Cho et al. in 2014. Every hidden state contains two gates: the forget gate decides how much information in the past hidden state to forget and the update decides how much past information to retain. As shown in the equation, gates are calculated through the sigmoid function to have an output ranging from 0 to 1. Thus, we can consider the output from the gate as a percentage of information from the past hidden states. The gating mechanism addresses the problem of vanishing gradients in traditional RNN by storing the information of past states in the two gates, and it also has less computational complexity than LSTM.
-            % zt = σ(W(z)xt + U(z)ht−1 + b(z))
-            % rt = σ(W(r)xt + U(r)ht−1 + b(r))
-            % h ̃t = tanh(Wxt + rt ⊙ Uht−1 + b(h))
-            % rt = zt ⊙ht−1 +(1−zt)⊙h ̃t)
+
+        $$ z_t = \sigma(W_z \cdot [h_{t-1},x_t])$$
+        $$ r_t = \sigma(W_r \cdot [h_{t-1},x_t])$$
+        $$ h_t = (1-z_t) \ast h_{t-1} + z_t \ast \tilde{h}_t$$
+        $$ \tilde h_t = tanh(W \cdot [r_t \ast h_{t-1}, x_t]_j)$$
 
     \subsection{Long-Short Term Memory (LSTM)}
         The idea of LSTM is developed by Sepp et al. in 1997. Here, we refer to the use of modern paper to explain the mechanism of LSTM. The LSTM has one additional element compared with the hidden state and it is the cell memory, so it could store both long-term and short-term information. There are three gates in the LSTM cells. They are input, forget, and output gates. The input gate decides how to handle the hidden state from the previous cell and the input of the current cell. The output gate decides how to forward the information of the cell to the next cell. The forget gate decides which information the cell could ignore and place more emphasis on more important ones. 
@@ -359,7 +360,7 @@ CSC 240 Final Project
 
     \subsection{GRU}
 
-        For the two artificial datasets, GRU achieved an MSE loss of around 0.0003 on the training set and below 0.01 on the testing set; also achieved an L1 loss around 0.01 on the training set and around 0.03 on the testing set. The two loss functions for both datasets converged within 5 epochs and GRU perfectly caught all the trends and peaks. MSE loss also converged within 5 epochs for the Microsoft stock price dataset; the losses for the training set and testing set are below 0.001. There was some fluctuation for L1 loss, but ultimately it achieved 0.007 for the training dataset and 0.035 for the testing set. The prediction showed some degree of delay especially when it came to the second half of the series. GRU outperformed on the S\&P 500 Index dataset with an MSE loss of near to zero on the training set and 0.002 on the testing set, and the L1 loss confirmed the performance. The prediction did not show any delay and caught every trend and peak (Figure ?), which is very impressive. For the crude oil price dataset, some deviation appeared at the beginning and the end of the series with MSE loss and L1 loss below 0.1. Although both loss functions converged within 10 epochs for the Bitcoin price dataset, using the MSE loss function for backpropagation resulted in a lower loss on both the training set and testing set. It also successfully predicted the extreme peak at the end of the series. Therefore, overall GRU was effectively applied to financial time-series data and had the best performance on all datasets compared to other models.
+        For the two artificial datasets, GRU achieved an MSE loss of around 0.0003 on the training set and below 0.01 on the testing set; also achieved an L1 loss around 0.01 on the training set and around 0.03 on the testing set. The two loss functions for both datasets converged within 5 epochs and GRU perfectly caught all the trends and peaks. MSE loss also converged within 5 epochs for the Microsoft stock price dataset; the losses for the training set and testing set are below 0.001. There was some fluctuation for L1 loss, but ultimately it achieved 0.007 for the training dataset and 0.035 for the testing set. The prediction showed some degree of delay especially when it came to the second half of the series. GRU outperformed on the S\&P 500 Index dataset with an MSE loss of near to zero on the training set and 0.002 on the testing set, and the L1 loss confirmed the performance. The prediction did not show any delay and caught every trend and peak (Figure ?), which is very impressive. For the crude oil price dataset, some deviation appeared at the beginning and the end of the series with MSE loss and L1 loss below 0.1. Although both loss functions converged within 10 epochs for the Bitcoin price dataset, using the MSE loss function for backpropagation resulted in a lower loss on both the training set and testing set. It also successfully predicted the extreme peak at the end of the series.
 
     \subsection{LSTM}
 
@@ -370,13 +371,13 @@ CSC 240 Final Project
             \caption{Final testing MSE loss comparison table\\ (highlighted means lowest loss of four networks in corresponding dataset)}
             \begin{threeparttable}
                 \scalebox{1.25}{
-                    \begin{tabular}{lllllll}
+                    \begin{tabular}{l|ll|llll}
                         \hline
                         Neural Network & A. Data 1 & A. Data 2 & Microsoft & S\&P 500 & Crude oil & Bitcoin\\
                         \hline
                         RNN &   0.001120 &      0.004046 & 0.007969 & 0.006365 & 0.203713 & 0.004013\\
-                        BRNN & 0.0013673 &     0.0030743 & 0.0008362 & 0.00812 & 0.038199 & 0.00068188\\
-                        GRU &               0.000583076 &   \textbf{0.00137562} & 0.000152029 & 0.00845555 & 0.00206164 & 4.66154e-06\\
+                        BRNN & 0.0013673 &     0.0030743 & 0.0008362 & \textbf{0.00812} & 0.038199 & 0.00068188\\
+                        GRU &               0.000583076 &   \textbf{0.00137562} & \textbf{0.000152029} & 0.00845555 & \textbf{0.00206164} & \textbf{4.66154e-06}\\
                         LSTM &              \textbf{0.00010624} &    0.0018777 & 0.0015584 & 0.0124008 & 0.158363 & 0.430384\\
                         \hline
                     \end{tabular}
@@ -388,23 +389,68 @@ CSC 240 Final Project
             \caption{Final testing L1 loss comparison table\\ (highlighted means lowest loss of four networks in corresponding dataset)}
             \begin{threeparttable}
                 \scalebox{1.25}{
-                    \begin{tabular}{lllllll}
+                    \begin{tabular}{l|ll|llll}
                         \hline
                         Neural Network & A. Data 1 & A. Data 2 & Microsoft & S\&P 500 & Crude oil & Bitcoin\\
                         \hline
                         RNN &   0.035910 &      0.104709 & 0.166426 & 0.126522 & 0.314213 & 0.153183\\
                         BRNN & 0.035822 &      0.0331284 & 0.0540353 & 0.143351 & 0.56455 & 0.0896484\\
-                        GRU &               0.0248689 &   0.0331632 & 0.0353123 & 0.0832669 & 0.0473527\\
-                        LSTM &              \textbf{0.005836} &    \textbf{0.0312243}\\
+                        GRU &               0.0248689 &   0.0331632 & 0.0353123 & \textbf{0.0832669} & \textbf{0.0473527} & 0.0700018\\
+                        LSTM &              \textbf{0.005836} &    \textbf{0.0312243} & \textbf{0.025047} & 0.127096 & 0.059322 & \textbf{0.066288}\\
                         \hline
                     \end{tabular}
                 }
             \end{threeparttable}
         \end{table*}
-            
+
+        \begin{figure*}
+            \centering
+            \begin{minipage}{\columnwidth}
+                \centering
+                \includegraphics[width=8cm]{image/GRU/bitcoin_graph.png}
+                \subcaption{Prediction by GRU, for Bitcoin prices}
+                \label{label1}
+            \end{minipage}%
+            \begin{minipage}{\columnwidth}
+                \centering
+                \includegraphics[width=8cm]{image/LSTM/bitcoin_graph.png}
+                \subcaption{Prediction by LSTM, for Bitcoin prices}
+                \label{label2}
+            \end{minipage}
+            \begin{minipage}{\columnwidth}
+                \centering
+                \includegraphics[width=8cm]{image/GRU/sp500_graph.png}
+                \subcaption{Prediction by GRU, for S\&P 500 Index}
+                \label{label3}
+            \end{minipage}%
+            \begin{minipage}{\columnwidth}
+                \centering
+                \includegraphics[width=8cm]{image/LSTM/sp500_graph.png}
+                \subcaption{Prediction by LSTM, for S\&P 500 Index}
+                \label{label4}
+            \end{minipage}
+            \captionsetup{margin=1.5cm}
+            \caption{Graphs showing the predicted values versus actual for a certain part of the corresponding dataset. Note the extreme difference in performance between GRU and LSTM in the Bitcoin prices and the S\&P 500 index dataset. Even though LSTM and GRU possess similar losses in the L1 metric, GRU appears to have a more accurate prediction than LSTM, when observed in the above graphs.}
+        \end{figure*}
     \subsection{Overall analysis}
-        Table VI and VII show the final testing MSE and L1 loss, respectively, in artificial datasets among the four analyzed networks. Of the four networks, LSTM seems to be the best performing, having the lowest loss in both MSE and L1 in artificial dataset 1, and the lowest loss in artificial dataset 2 in L1 loss, though just slightly lower than that of bidirectional RNN and GRU, about 0.02 difference. In general, all four networks' loss seem to be converging over the course of the training process, so we can conclude that these methods all work well with artificial data.
- 
+        Table VI and VII show the final testing MSE and L1 loss, respectively, in all 6 datasets among the four analyzed networks. Of the four networks, LSTM seems to be the best performing, having the lowest loss in both MSE and L1 in artificial dataset 1, and the lowest loss in artificial dataset 2 in L1 loss, though just slightly lower than that of bidirectional RNN and GRU, about 0.02 difference. In general, all four networks' loss seem to be converging (see Appendix for loss change graphs) over the course of the training process, so we can conclude that these methods all work well with artificial data.
+
+        Regarding actual datasets, GRU seems to have the performance when it comes to using MSE loss for the actual datsets, with 3 out of 4 real-world datasets having the lowest loss out of the 4 network, with its final testing loss in S\&P 500 at 0.0084555 being very close to the one with the lowest loss, which is BRNN at 0.00812. We are confident that if we run the implementation again GRU will be able to perform better than BRNN. With regard to L1 loss, it seems that LSTM perform equally well to GRU, having the lowest loss in 2 out the four real-world datasets. Both networks' loss seem to have only slight difference from each other (see above tables), so we can say that based on L1 loss there are no definitive best networks for these 4 datasets. However, when observing the predictions versus actual values graph for GRU and LSTM, it seems that GRU has a more accurate predictions than LSTM (see Fig. 9). This is quite an interesting observation, considering the extereme difference in actual performance when there are similarity in L1 losses for GRU and LSTM. We are not sure why this happened, and would like to investigate the cause for this, but due to time constraint we will leave this at that.
+        
+        Overall, when considered the final testing losses of both MSE and L1 for all 6 applied datasets of the 4 models, overall GRU was effectively applied to financial time-series data and had the best performance on all datasets compared to other models.
+
+\section{Dicussion}
+    \subsection{What to say about our result}
+        Since there are already many research papers written for this exact same subject, that is, deep learning in time series, our project serves to only reinforce and certify some claims put forward by some of our predecessors. As we have noted before, this is not a novel approach to time series analysis. However, we still went ahead with this project idea anyway, since it might help to confirm others' conclusion in this field of deep learning.
+
+    \subsection{Shortcomings}
+        This project was not completed without any shortcomings, and so we would like to discuss some that could improve our overall analysis. The first thing is that since the four models were individually developed by each of the person in our team, we might have a synchronization problem: the implementation (the overall model structure and the boilerplate training code) we wrote was not centralized until the very end of the project period, so there might exist some bias between a model might perform better than the others not due to its nature, but due to the actual code that was written for it. This is a potentially serious problem that could affect our overall analysis.
+
+        Another shortcoming is the one that has been mentioned above: there are some non-deterministic discrepancies between the final testing L1 loss of GRU and LSTM and the predictions they produce. If given more time, we could have probed more at our implementation and understand the cause, but for now we will leave it at this.  
+        
+
+\section{Conclusion}
+    By taking a look at four recurrent neural network structures and using them for prediction in both real-life and artificial financial datasets, we were able to analyze the performance of deep learning in price prediction. Overall, the four models we chose, traditional RNN, bidirectional RNN, GRU, and LSTM, peform well with this task of time series analysis, as observed from their converging losses on the 6 datasets, 4 real-world, 2 artificial. Of the four models that we experiemented with, GRU performs the best, despite our initial expectation that LSTM would be the one with the better performance. There are some issues that we have mentioned in the shortcomings section above, but in general, we believe our analysis is quite satisfactory for this project. It was interesting to see how deep learning models were able to be trained into predicting time series data, with a good performance. If possible, we would like to compare the performance of deep learning with that of the autoregressive methods, which we believe will give us some interesting results and insights.
 
 
 \section{Division of Labor}
@@ -443,9 +489,6 @@ CSC 240 Final Project
 
     \subsection{Final report}
         Similar to the presentation, each team member was responsible for their own report of their assigned neural network. The final report was put together in LaTeX by Vuong.
-
-\section{Conclusion}
-    By taking a look at four recurrent neural network structures and using them for prediction in both real-life and artificial financial datasets, we were able to analyze the performance of deep learning in price prediction, and this, we believe, will open paths to more research on such methods in time series forecasting with deep learning. 
 
 \section{Appendix}
     In this section we put the predicted values versus actual along with loss behavior graphs for our analysis. This can be used for reference.
