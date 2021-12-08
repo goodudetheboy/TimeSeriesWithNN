@@ -148,7 +148,7 @@ CSC 240 Final Project
         We implemented a 1-layer traditional RNN model with 64 hidden neurons on the six datasets by using PyTorch packages. The inputs are grouped in batches to facilitate the backpropagation process. For datasets with large numbers of samples - artificial 1, bitcoin, and artificial 2 datasets - we group them into 64 batches, while for Microsoft stock, crude oil, and S\&P 500 stock datasets, we use 32 batches. To improve the robustness of our model and prevent overfitting, we used a dropout rate of 0.2 and the RELU activation function to train our model. Moreover, we did 50 epochs on the S\&P 500 stock dataset and 20 epochs on the other datasets since the S\&P 500 dataset needed more epochs to converge during backpropagation. 
 
     \subsection{Bidirectional RNN}
-        The structure of the bidirectional RNN is very similar to the above traditional RNN, but with the RNN cell replaced with bidirectional RNN cells. We also apply some changes in the internal linear output layers to take in double the hidden output size, since the output of the bidirectional RNN is doubled in size compared to the RNN. The internal bidirectional RNN cell contains 64 hidden layers. This neural network trains on 50 epochs at a learning rate of 0.001, with an input batch size of 32 or 64 based on sample size, and a lookback of 5 days, or time steps. 
+        The structure of the bidirectional RNN is very similar to the above traditional RNN, but with the RNN cell replaced with bidirectional RNN cells. We also apply some changes in the internal linear output layers to take in double the hidden output size, since the output of the bidirectional RNN is doubled in size compared to the RNN. The internal bidirectional RNN cell contains 64 hidden layers. This neural network trains on 50 epochs for all datasets at a learning rate of 0.001, with an input batch size of 32 or 64 based on sample size, and a lookback of 5 days, or time steps. 
 
     \subsection{GRU}
         A one-layer GRU was implemented with an input size equal to the lookback of 5 days and 64 hidden neurons in one hidden state. One dense layer of linear function followed it to output the final prediction. Using the TensorDataset and DataLoader method from Pytorch, we transformed the data to tensors and separated them with different batch sizes 32 or 64 based on the sample size. With a learning rate of 0.001, the model was run separately using different loss functions for backpropagation to check the consistency of the prediction results.
@@ -244,6 +244,7 @@ CSC 240 Final Project
     This sections details the result we received from the performance of each of the network and their corresponding analysis.
     \begin{table*}[t]
         \centering
+        \captionsetup{justification=centering,margin=2cm}
         \caption{Table containing the final loss (MSE and L1) of testing and training after 50 epochs for RNN.}
         \scalebox{1.25}{
             \begin{tabular}{lllll}
@@ -265,7 +266,8 @@ CSC 240 Final Project
     \end{table*}
     \begin{table*}[t]
         \centering
-        \caption{Table containing the final loss (MSE and L1) of testing and training after 50 epochs for bidirectional RNN.}
+        \captionsetup{justification=centering,margin=2cm}
+        \caption{Table containing the final loss (MSE and L1) of testing and training after 50 epochs for BRNN.}
         \scalebox{1.25}{
             \begin{tabular}{lllll}
                 \hline
@@ -284,6 +286,7 @@ CSC 240 Final Project
     \end{table*}
     \begin{table*}[t]
         \centering
+        \captionsetup{justification=centering,margin=2cm}
         \caption{Table containing the final loss (MSE and L1) of testing and training after 50 epochs for GRU.}
         \scalebox{1.25}{
             \begin{tabular}{lllll}
@@ -303,6 +306,7 @@ CSC 240 Final Project
     \end{table*}
     \begin{table*}[t]
         \centering
+        \captionsetup{justification=centering,margin=2cm}
         \caption{Table containing the final loss (MSE and L1) of testing and training after 50 epochs for LSTM.}
         \scalebox{1.25}{
             \begin{tabular}{lllll}
@@ -361,6 +365,48 @@ CSC 240 Final Project
 
         The LSTM model is expected to perform best compared with the other models in theory as it could use both information from the long and short term when outputting the prediction. Throughout the testing with datasets, we could see the usual common thing is that both test and train loss decrease over time which signals that our model for LSTM is not in overfitting issue. But for the cases when having datasets with extreme increases suddenly in their values, the model fails to capture that successfully. On the other hand, the LSTM seems to do very well on the artificial dataset and the ones that don’t have a sudden big changes in their values throughout time. It could just capture the shape slightly but not to what we expect. The train and test overall have some volatile shape in their plots at some points before the convergence.
 
+        \begin{table*}[th] \centering
+            \captionsetup{justification=centering,margin=2cm}
+            \caption{Final testing MSE loss comparison table\\ (highlighted means lowest loss of four networks in corresponding dataset)}
+            \begin{threeparttable}
+                \scalebox{1.25}{
+                    \begin{tabular}{lllllll}
+                        \hline
+                        Neural Network & A. Data 1 & A. Data 2 & Microsoft & S\&P 500 & Crude oil & Bitcoin\\
+                        \hline
+                        RNN &   0.001120 &      0.004046 & 0.007969 & 0.006365 & 0.203713 & 0.004013\\
+                        BRNN & 0.0013673 &     0.0030743 & 0.0008362 & 0.00812 & 0.038199 & 0.00068188\\
+                        GRU &               0.000583076 &   \textbf{0.00137562} & 0.000152029 & 0.00845555 & 0.00206164 & 4.66154e-06\\
+                        LSTM &              \textbf{0.00010624} &    0.0018777 & 0.0015584 & 0.0124008 & 0.158363 & 0.430384\\
+                        \hline
+                    \end{tabular}
+                }
+            \end{threeparttable}
+        \end{table*}
+        \begin{table*}[th] \centering
+            \captionsetup{justification=centering,margin=2cm}
+            \caption{Final testing L1 loss comparison table\\ (highlighted means lowest loss of four networks in corresponding dataset)}
+            \begin{threeparttable}
+                \scalebox{1.25}{
+                    \begin{tabular}{lllllll}
+                        \hline
+                        Neural Network & A. Data 1 & A. Data 2 & Microsoft & S\&P 500 & Crude oil & Bitcoin\\
+                        \hline
+                        RNN &   0.035910 &      0.104709 & 0.166426 & 0.126522 & 0.314213 & 0.153183\\
+                        BRNN & 0.035822 &      0.0331284 & 0.0540353 & 0.143351 & 0.56455 & 0.0896484\\
+                        GRU &               0.0248689 &   0.0331632 & 0.0353123 & 0.0832669 & 0.0473527\\
+                        LSTM &              \textbf{0.005836} &    \textbf{0.0312243}\\
+                        \hline
+                    \end{tabular}
+                }
+            \end{threeparttable}
+        \end{table*}
+            
+    \subsection{Overall analysis}
+        Table VI and VII show the final testing MSE and L1 loss, respectively, in artificial datasets among the four analyzed networks. Of the four networks, LSTM seems to be the best performing, having the lowest loss in both MSE and L1 in artificial dataset 1, and the lowest loss in artificial dataset 2 in L1 loss, though just slightly lower than that of bidirectional RNN and GRU, about 0.02 difference. In general, all four networks' loss seem to be converging over the course of the training process, so we can conclude that these methods all work well with artificial data.
+ 
+
+
 \section{Division of Labor}
     The work of this project was split evenly between the team members. We will be elaborating the division of labor in each stage of this final project by providing a table of who did what in the following sections:
 
@@ -376,18 +422,18 @@ CSC 240 Final Project
     \subsection{Presentation}
         \subsubsection{Neural network implementation} We have split up the four neural networks implementation responsiblity as detailed in the following table:
             \begin{table}[h!] \centering
-                \caption{Datasets }
+                \caption{Datasets}
                 \begin{threeparttable}
-                        \begin{tabular}{|c|c|}
-                            \hline
-                            Neural Network Name & Implementer\\
-                            \hline
-                            Traditional RNN & Qianwen\\
-                            Bidirectional RNN & Vuong\\
-                            GRU & Chuqin\\
-                            LSTM & Minh Khoi\\
-                            \hline
-                        \end{tabular}
+                    \begin{tabular}{|c|c|}
+                        \hline
+                        Neural Network Name & Implementer\\
+                        \hline
+                        Traditional RNN & Qianwen\\
+                        Bidirectional RNN & Vuong\\
+                        GRU & Chuqin\\
+                        LSTM & Minh Khoi\\
+                        \hline
+                    \end{tabular}
                 \end{threeparttable}
             \end{table}
 
@@ -399,7 +445,7 @@ CSC 240 Final Project
         Similar to the presentation, each team member was responsible for their own report of their assigned neural network. The final report was put together in LaTeX by Vuong.
 
 \section{Conclusion}
-    In this prospectus, we have laid out how we are going to approach the final project with the idea of exploring the possibilities of deep learning in time series forecasting, specifically price prediction. By taking a look at four recurrent neural network structures and using them for prediction in both real-life and artificial financial datasets, we hope to be able to analyze the performance of deep learning in price prediction, and this, we believe, will open paths to more research on such methods in time series forecasting with deep learning. 
+    By taking a look at four recurrent neural network structures and using them for prediction in both real-life and artificial financial datasets, we were able to analyze the performance of deep learning in price prediction, and this, we believe, will open paths to more research on such methods in time series forecasting with deep learning. 
 
 \section{Appendix}
     In this section we put the predicted values versus actual along with loss behavior graphs for our analysis. This can be used for reference.
