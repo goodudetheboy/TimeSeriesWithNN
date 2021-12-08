@@ -261,7 +261,7 @@
 [7] https://arxiv.org/abs/1701.01887
 [8] https://ieeexplore.ieee.org/abstract/document/7015739
 [9] https://www.sciencedirect.com/science/article/pii/S1568494620301216
-[10] https://doi.org/10.1093/bib/bbx044
+[10] https: //doi.org/10.1093/bib/bbx044
 [11] https://doi.org/10.3389/fdata.2020.00004
 [12] https://doi.org/10.1016/j.jbi.2018.04.007
 [13] https://doi.org/10.3233/AIS-200546
