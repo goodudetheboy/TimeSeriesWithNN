@@ -148,7 +148,7 @@ CSC 240 Final Project
         We implemented a 1-layer traditional RNN model with 64 hidden neurons on the six datasets by using PyTorch packages. The inputs are grouped in batches to facilitate the backpropagation process. For datasets with large numbers of samples - artificial 1, bitcoin, and artificial 2 datasets - we group them into 64 batches, while for Microsoft stock, crude oil, and S\&P 500 stock datasets, we use 32 batches. To improve the robustness of our model and prevent overfitting, we used a dropout rate of 0.2 and the RELU activation function to train our model. Moreover, we did 50 epochs on the S\&P 500 stock dataset and 20 epochs on the other datasets since the S\&P 500 dataset needed more epochs to converge during backpropagation. 
 
     \subsection{Bidirectional RNN}
-        The structure of the bidirectional RNN is very similar to the above traditional RNN, but with the RNN cell replaced with bidirectional RNN cells. We also apply some changes in the internal linear output layers to take in double the hidden output size, since the output of the bidirectional RNN is doubled in size compared to the RNN. The internal bidirectional RNN cell contains 64 hidden layers. This neural network trains on 50 epochs at a learning rate of 0.001, with an input batch size of 32 or 64 based on sample size, and a lookback of 5 days, or time steps. 
+        The structure of the bidirectional RNN is very similar to the above traditional RNN, but with the RNN cell replaced with bidirectional RNN cells. We also apply some changes in the internal linear output layers to take in double the hidden output size, since the output of the bidirectional RNN is doubled in size compared to the RNN. The internal bidirectional RNN cell contains 64 hidden layers. This neural network trains on 50 epochs for all datasets at a learning rate of 0.001, with an input batch size of 32 or 64 based on sample size, and a lookback of 5 days, or time steps. 
 
     \subsection{GRU}
         A one-layer GRU was implemented with an input size equal to the lookback of 5 days and 64 hidden neurons in one hidden state. One dense layer of linear function followed it to output the final prediction. Using the TensorDataset and DataLoader method from Pytorch, we transformed the data to tensors and separated them with different batch sizes 32 or 64 based on the sample size. With a learning rate of 0.001, the model was run separately using different loss functions for backpropagation to check the consistency of the prediction results.
@@ -180,61 +180,66 @@ CSC 240 Final Project
         \end{table}
 
         With the four datasets belonging into slightly different subfields of the financial world, we can reliably compare our prediction accuracy of each models we use and apply our findings to generalize without biases. This following subsections detail some analysis on the above four datasets:
-
-        \subsubsection{Microsoft Stock prices} For this dataset, we decide to go with the close stock prices of Microsoft (MSFT on NASDAQ) from 2015-04-01 to 2021-03-3. Here we graph the values of Microsoft Stock prices over time in Fig. 1:
-        \begin{figure}[thpb]
+        \begin{figure*}
             \centering
-            \includegraphics[width=8cm]{image/1.png}
-            \caption{Microsoft (MSFT) close stock prices (in USD) over time.}
-            \label{figurelabel}
-        \end{figure}
-        
+            \begin{minipage}[b]{.4\textwidth}
+                \centering
+                \includegraphics[width=8cm]{image/1.png}
+                \caption{Microsoft (MSFT) close stock prices (in USD) over time.}\label{fig:sub1}
+            \end{minipage}\qquad
+            \begin{minipage}[b]{.4\textwidth}
+                \centering
+                \includegraphics[width=8cm]{image/2.png}
+                \caption{S\&P 500 Index over time.}\label{fig:sub2}
+            \end{minipage}
+        \end{figure*}
+
+        \begin{figure*}
+            \centering
+            \begin{minipage}[b]{.4\textwidth}
+                \centering
+                \includegraphics[width=8cm]{image/3.png}
+                \caption{Europe crude oil prices (in USD) over time.}\label{fig:sub3}
+            \end{minipage}\qquad
+            \begin{minipage}[b]{.4\textwidth}
+                \centering
+                \includegraphics[width=8cm]{image/4.png}
+                \caption{Bitcoin prices (in USD) at close over time.}\label{fig:sub4}
+            \end{minipage}
+
+        \end{figure*}
+
+        \begin{figure*}
+            \centering
+            \begin{minipage}[b]{.4\textwidth}
+                \centering
+                \includegraphics[width=8cm]{image/7.png}
+                \caption{Generated time series dataset 1.}\label{fig:sub5}
+            \end{minipage}\qquad
+            \begin{minipage}[b]{.4\textwidth}
+                \centering
+                \includegraphics[width=8cm]{image/8.png}
+                \caption{Generated time series dataset 2.}\label{fig:sub6}
+            \end{minipage}
+        \end{figure*}
+
+        \subsubsection{Microsoft Stock prices} For this dataset, we decide to go with the close stock prices of Microsoft (MSFT on NASDAQ) from 2015-04-01 to 2021-03-3. Fig. 1 graphs the values of Microsoft Stock prices over time.
+
         \textit{Analysis}: From the graph above, we can see that MSFT Stock prices experiences a general increase from 2015, with only small sudden decreases happening in 2018 and 2020. This dataset provides us with a generally increasing time series data, and we expect that our 4 models can easily pick up this forward trend and predict well in during their evaluation. 
 
-        \subsubsection{S\&P 500 Index} The Standard \& Poor 500 Index (S\&P 500) is a stock market index tracking the performance of 500 large companies listed on stock exchanges in the United States\footnote{Wikipedia}, and the dataset that we have contains index from 1871-01-01 to 2018-04-01. Here we graph the values of the S\&P 500 Index over time in Fig. 2:
-
-        \begin{figure}[thpb]
-            \centering
-            \includegraphics[width=8cm]{image/2.png}
-            \caption{S\&P 500 Index over time.}
-            \label{figurelabel}
-        \end{figure}
+        \subsubsection{S\&P 500 Index} The Standard \& Poor 500 Index (S\&P 500) is a stock market index tracking the performance of 500 large companies listed on stock exchanges in the United States\footnote{Wikipedia}, and the dataset that we have contains index from 1871-01-01 to 2018-04-01. Fig. 2 graphs the values of the S\&P 500 Index over time.
 
         \textit{Analysis}: The reason we chose this dataset is due to its special feature: it plateaus for quite a while from 1871 to 1987, before sharply increasing and decreasing over the next 40 years, and increasing rapidly when closer to the current present. This feature is considerably different from what we observe in the MSFT stock price, where it is a general increase with small fluctuations, giving us another perspective to weigh in in our comparison.
 
-        \subsubsection{Europe Crude Oil Prices} The dataset contains the crude oil prices (in USD) of Europe from 2015-11-02 to 2021-11-01. Here we graph the values of the Europe crude oil prices over time in Fig. 3:
-
-        \begin{figure}[thpb]
-            \centering
-             \includegraphics[width=8cm]{image/3.png}
-            \caption{Europe crude oil prices (in USD) over time.}
-            \label{figurelabel}
-        \end{figure}
+        \subsubsection{Europe Crude Oil Prices} The dataset contains the crude oil prices (in USD) of Europe from 2015-11-02 to 2021-11-01. Fig. 3 graphs the values of the Europe crude oil prices over time.
 
         \textit{Analysis}: This dataset contains an even more different trend than the previous two, with a high degree of fluctuation with one period of sharp increase and one period of sharp decrease back-to-back, mixed with many fluctuating plateaus also. There are no general upward or downward trends to conclude definitively. With this high entropy, we expect the 4 methods to struggle quite a bit picking up trends in these datasets. 
 
-        \subsubsection{Bitcoin Prices} The main dataset from Kaggle offer prices of many different cryptocurrency; however, we decided to go with Bitcoin since it seems to be the most popular one currently as of 2021. The dataset contains Bitcoin prices (in USD) at close from 2013-04-29 to 2021-07-06. Here we graph the values of the Bitcoin prices at close over time in Fig. 4:
-
-        \begin{figure}[thpb]
-            \centering
-              \includegraphics[width=8cm]{image/4.png}
-            \caption{Bitcoin prices (in USD) at close over time.}
-            \label{figurelabel}
-        \end{figure}
+        \subsubsection{Bitcoin Prices} The main dataset from Kaggle offer prices of many different cryptocurrency; however, we decided to go with Bitcoin since it seems to be the most popular one currently as of 2021. The dataset contains Bitcoin prices (in USD) at close from 2013-04-29 to 2021-07-06. Fig. 4 graphs the values of the Bitcoin prices at close over time.
 
         \textit{Analysis}: This dataset has a somewhat similar trend to the S\&P 500 one; however, after a period of a plateau from 2013 to late 2016, it is followed by a small sharp increase, then followed by a small fluctuating plateau, for 2 years, then spiking again before dropping sharply again, while the S\&P 500 contains two back-to-back series of spikes and decreases. We also expect the four methods to struggle on confidently picking up the trend as well, considering a quite unorthodox trend growth.
 
-        \subsubsection{Artificial Data} Besides the real-life datasets listed above, we have also created an algorithm that generated artificial time series dataset, and would apply our neural networks on two which will be created during the course of our final project. The following figures showcase the trend lines of the two artificial datasets that were generated by our methods.
-        \begin{figure}[thpb]
-            \centering
-            \includegraphics[width=7cm]{image/7.png}
-            \caption{Generated time series dataset 1.}
-            \label{figurelabel}
-            \centering
-            \includegraphics[width=7cm]{image/8.png}
-            \caption{Generated time series dataset 2.}
-            \label{figurelabel}
-        \end{figure}
+        \subsubsection{Artificial Data} Besides the real-life datasets listed above, we have also created an algorithm that generated artificial time series dataset, and would apply our neural networks on two which will be created during the course of our final project. Fig. 5 and 6 showcase the trend lines of the two artificial datasets that were generated by our methods.
 
         \textit{Algorithm}: To generate an artificial time-series dataset, we first used the Pandas package to create a dataframe ranging from 2000-01-01 to 2021-12-31,  and random numbers generated by Numpy were assigned to the dataframe. Then, the seasonal decomposition method from statsmodels package was applied to the dataframe with a period of 365 days, resulting in trend, seasonality, and residual. The trend was calculated by moving average with a window length of 365, so the first half-year and the last half year will disappear. We extracted the trend data as our final artificial dataset since it is more similar to the normal financial time-series data. A total of 7307 timesteps was generated.
 
@@ -361,6 +366,45 @@ CSC 240 Final Project
 
         The LSTM model is expected to perform best compared with the other models in theory as it could use both information from the long and short term when outputting the prediction. Throughout the testing with datasets, we could see the usual common thing is that both test and train loss decrease over time which signals that our model for LSTM is not in overfitting issue. But for the cases when having datasets with extreme increases suddenly in their values, the model fails to capture that successfully. On the other hand, the LSTM seems to do very well on the artificial dataset and the ones that don’t have a sudden big changes in their values throughout time. It could just capture the shape slightly but not to what we expect. The train and test overall have some volatile shape in their plots at some points before the convergence.
 
+    \subsection{Overall analysis}
+        Table VI and VII show the final testing MSE and L1 loss, respectively, in artificial datasets among the four analyzed networks. Of the four networks, LSTM seems to be the best performing, having the lowest loss in both MSE and L1 in artificial dataset 1, and the lowest loss in artificial dataset 2 in L1 loss, though just slightly lower than that of bidirectional RNN and GRU, about 0.02 difference. Generally, all four network's loss seem
+        \begin{table}[h!] \centering
+            \caption{Final testing MSE loss in artificial datasets comparison table (highlighted means lowest loss of four networks in corresponding dataset)}
+            \begin{threeparttable}
+                \scalebox{1.25}{
+                    \begin{tabular}{lll}
+                        \hline
+                        Neural Network Name & A. Data 1 & A. Data 2\\
+                        \hline
+                        Traditional RNN &   0.001120 &      0.004046\\
+                        Bidirectional RNN & 0.0013673 &     0.0030743\\
+                        GRU &               0.000583076 &   \textbf{0.00137562}\\
+                        LSTM &              \textbf{0.00010624} &    0.0018777\\
+                        \hline
+                    \end{tabular}
+                }
+            \end{threeparttable}
+        \end{table}
+        \begin{table}[h!] \centering
+            \caption{Final testing L1 loss in artificial datasets comparison table (highlighted means lowest loss of four networks in corresponding dataset)}
+            \begin{threeparttable}
+                \scalebox{1.25}{
+                    \begin{tabular}{lll}
+                        \hline
+                        Neural Network Name & A. Data 1 & A. Data 2\\
+                        \hline
+                        Traditional RNN &   0.035910 &      0.104709\\
+                        Bidirectional RNN & 0.035822 &      0.0331284\\
+                        GRU &               0.0248689 &   0.0331632\\
+                        LSTM &              \textbf{0.005836} &    \textbf{0.0312243}\\
+                        \hline
+                    \end{tabular}
+                }
+            \end{threeparttable}
+        \end{table}
+
+
+
 \section{Division of Labor}
     The work of this project was split evenly between the team members. We will be elaborating the division of labor in each stage of this final project by providing a table of who did what in the following sections:
 
@@ -376,18 +420,18 @@ CSC 240 Final Project
     \subsection{Presentation}
         \subsubsection{Neural network implementation} We have split up the four neural networks implementation responsiblity as detailed in the following table:
             \begin{table}[h!] \centering
-                \caption{Datasets }
+                \caption{Datasets}
                 \begin{threeparttable}
-                        \begin{tabular}{|c|c|}
-                            \hline
-                            Neural Network Name & Implementer\\
-                            \hline
-                            Traditional RNN & Qianwen\\
-                            Bidirectional RNN & Vuong\\
-                            GRU & Chuqin\\
-                            LSTM & Minh Khoi\\
-                            \hline
-                        \end{tabular}
+                    \begin{tabular}{|c|c|}
+                        \hline
+                        Neural Network Name & Implementer\\
+                        \hline
+                        Traditional RNN & Qianwen\\
+                        Bidirectional RNN & Vuong\\
+                        GRU & Chuqin\\
+                        LSTM & Minh Khoi\\
+                        \hline
+                    \end{tabular}
                 \end{threeparttable}
             \end{table}
 
@@ -399,7 +443,7 @@ CSC 240 Final Project
         Similar to the presentation, each team member was responsible for their own report of their assigned neural network. The final report was put together in LaTeX by Vuong.
 
 \section{Conclusion}
-    In this prospectus, we have laid out how we are going to approach the final project with the idea of exploring the possibilities of deep learning in time series forecasting, specifically price prediction. By taking a look at four recurrent neural network structures and using them for prediction in both real-life and artificial financial datasets, we hope to be able to analyze the performance of deep learning in price prediction, and this, we believe, will open paths to more research on such methods in time series forecasting with deep learning. 
+    By taking a look at four recurrent neural network structures and using them for prediction in both real-life and artificial financial datasets, we were able to analyze the performance of deep learning in price prediction, and this, we believe, will open paths to more research on such methods in time series forecasting with deep learning. 
 
 \section{Appendix}
     In this section we put the predicted values versus actual along with loss behavior graphs for our analysis. This can be used for reference.
