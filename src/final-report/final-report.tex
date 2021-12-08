@@ -122,16 +122,33 @@ CSC 240 Final Project
     \subsection{Why RNN?}
         Recurrent Neural Networks (RNNs) are a class of neural networks that “are naturally suited to processing time-series data and other sequential data” (DiPietro \& Hager, 2020). Traditional RNN is the base model of the other RNN variants. Its basic structure is shown in the diagram:
         
-        (diagram)
-        
-        it takes into a sequential input vector, does calculations for the hidden units, and then gives an output vector based on the calculations. The hidden units are the key to enable processing sequential data since the current hidden state is calculated based on the input vector and the previous state. This dependency memorizes the historical data and preserves the order of the sequential data. A sigmoid function is used in hidden states calculations in order to introduce non-linearity to our model as real-life data is usually non-linear. The weight matrix is found by finding gradients during the backpropagation process to minimize the loss function of choice. The same function and set of parameters will be used for calculating all the hidden states as shown in the equation diagram.
+        \begin{figure}[thpb]
+            \centering
+             \includegraphics[width=5cm]{image/11.png}
+            \caption{Structure of an RNN cell (Soleimany, 2020).}
+            \label{figurelabel}
+        \end{figure}
+
+        \begin{figure}[thpb]
+            \centering
+             \includegraphics[width=8cm]{image/12.png}
+            \caption{Hidden state formula in an RNN cell (Li, Johnson \& Yeung, 2017).}
+            \label{figurelabel}
+        \end{figure}
+
+        It takes into a sequential input vector, does calculations for the hidden units, and then gives an output vector based on the calculations. The hidden units are the key to enable processing sequential data since the current hidden state is calculated based on the input vector and the previous state. This dependency memorizes the historical data and preserves the order of the sequential data. A sigmoid function is used in hidden states calculations in order to introduce non-linearity to our model as real-life data is usually non-linear. The weight matrix is found by finding gradients during the backpropagation process to minimize the loss function of choice. The same function and set of parameters will be used for calculating all the hidden states as shown in the equation diagram.
 
     \subsection{Bidirectional RNN}
-        Bidirectional RNN, as its name suggests, is a recurrent neural network whose information flows both ways during the training process. First introduced in 1997 in the paper by Schuster and Paliwal (1997), bidirectional RNN is a direct extension of the original recurrent neural network, with the ability to learn from both past and future contexts due to its two-way nature. As noted by the authors, the structure of the bidirectional RNN contains two sets of state neurons of a traditional RNN that are responsible for either forward and backward states. Inputs are fed to both context flow, but outputs from forward are not given to inputs of backward states, and vice versa. (see diagram, taken from the paper)
+        Bidirectional RNN, as its name suggests, is a recurrent neural network whose information flows both ways during the training process. First introduced in 1997 in the paper by Schuster and Paliwal (1997), bidirectional RNN is a direct extension of the original recurrent neural network, with the ability to learn from both past and future contexts due to its two-way nature. As noted by the authors, the structure of the bidirectional RNN contains two sets of state neurons of a traditional RNN that are responsible for either forward and backward states. Inputs are fed to both context flow, but outputs from forward are not given to inputs of backward states, and vice versa. (see figure below)
         
-        (bidirectional RNN diagram)
+        \begin{figure}[thpb]
+            \centering
+             \includegraphics[width=8cm]{image/13.png}
+            \caption{Structure of a BRNN model (Schuster, 1997).}
+            \label{figurelabel}
+        \end{figure}
 
-        The authors remarked that since the network is considering both past and future information, it allows the objective function to be directly minimized "without the need for delays to include future information", in contrast to the regular undirectional RNN. Experiments with bidirectional RNN confirms its better performance than the regular RNN in some cases (Cao et al. (2018) propose BRITS (Bidirectional Recurrent Imputation for Time Series), a slight modification of bidirectional RNN, with an 11.56 MAE loss, lower than the 14.24 of RNN), and we speculate that the bidirectional RNN would work better in our time series prediction tasks than the traditional RNN, as well, due to its ability to pick up more context (from both future and past).
+        The authors remarked that since the network is considering both past and future information, it allows the objective function to be directly minimized "without the need for delays to include future information", in contrast to the regular unidirectional RNN. Experiments with bidirectional RNN confirms its better performance than the regular RNN in some cases (Cao et al. (2018) propose BRITS (Bidirectional Recurrent Imputation for Time Series), a slight modification of bidirectional RNN, with an 11.56 MAE loss, lower than the 14.24 of RNN), and we speculate that the bidirectional RNN would work better in our time series prediction tasks than the traditional RNN, as well, due to its ability to pick up more context (from both future and past).
 
     \subsection{Gated Recurrent Unit (GRU)}
         GRU is a gating mechanism developed from RNN by Cho et al. in 2014. Every hidden state contains two gates: the forget gate decides how much information in the past hidden state to forget and the update decides how much past information to retain. As shown in the equation, gates are calculated through the sigmoid function to have an output ranging from 0 to 1. Thus, we can consider the output from the gate as a percentage of information from the past hidden states. The gating mechanism addresses the problem of vanishing gradients in traditional RNN by storing the information of past states in the two gates, and it also has less computational complexity than LSTM.
@@ -329,16 +346,21 @@ CSC 240 Final Project
     \subsection{Traditional RNN}
         According to the table shown below, backpropagation using the MSE loss function generally has better performance than using the L1 loss function. This phenomenon can be explained by the fact that MSE loss is based on the probabilistic assumption of a Gaussian distribution and that financial data is approximately following a normal distribution. 
     
-        Since the nature of the RNN model is drawing insights from the data itself by mathematical calculations, as expected, our model can well predict the two artificial datasets, with total testing MSE loss of 0.00112 and 0.00405 respectively. As shown in the graphs, the prediction and the actual data lines almost always overlap each other.  
-    
+        Since the nature of the RNN model is drawing insights from the data itself by mathematical calculations, as expected, our model can well predict the two artificial datasets, with total testing MSE loss of 0.00112 and 0.00405 respectively. As shown in the graph below, the prediction and the actual data lines almost always overlap each other.
+ 
+        \begin{figure}[thpb]
+            \centering
+             \includegraphics[width=8cm]{image/RNN/adata1_graph.png}
+            \caption{Predicted values versus actual by RNN on artificial dataset 1.}
+            \label{figurelabel}
+        \end{figure}
+
         The implementation of the four real financial data is also successful with the total testing MSE loss ranging from 0.00401 to 0.204 across different datasets. The total testing MSE loss of the S\&P 500 dataset is the largest. According to the prediction and actuals comparison graph, we can see that our model can catch the general trend as well as the fluctuations of the dataset, but it keeps underestimating the values as shown in the gap between the two lines. Similar issues also appear in other financial datasets: for example, the crude oil price prediction overestimates the trough values while underestimates the peak values, and the bitcoin price prediction underestimates the peak values at the time steps 400-600. The failure may be because financial data is not perfectly normal but a normal-like distribution with fat tails, which means the real-life financial data will have more extreme values than mathematical tools predict based on probabilities. Looking at the original S\&P 500 price graph, the market demonstrates a relatively constant state from 1871 to 1971, while it dramatically increases after that. It would be difficult for the model to predict the extreme increase based on the relatively stable historical trend. 
 
 
     \subsection{Bidirectional RNN}
 
         As expected, bidirectional RNN performs quite better than the traditional RNN, at least with real-world datasets. While the final MSE and L1 loss of BRNN detailed above for Artificial Dataset 1 and 2 are close and some may be a bit higher than that of RNN, the performance of BRNN is much better in the real datasets. BRNN performs significantly better than RNN at predicting Microsoft stock prices and Bitcoin price, with the testing MSE loss of BRNN in predicting Bitcoin prices at 0.00068188, almost 5 times smaller than that of RNN, at 0.004013. However, it should be noted that the performance of BRNN and RNN are quite identical in the crude oil prices, with the testing MSE Loss in predicting oil prices of BRNN at 0.00812 being a bit higher than that of RNN, at 0.006365.
-
-        From observing the predicted values versus the actual graph of the S\&P 500 Index for BRNN, we observe equally bad results as that predicted by RNN. The predicted trend line seems to be overestimating decreasing and increasing compared to the actual trend lines, as seen from the graph below:
 
         \begin{figure}[thpb]
             \centering
@@ -347,7 +369,7 @@ CSC 240 Final Project
             \label{figurelabel}
         \end{figure}
 
-        As observed, whenever there is a slight decrease or increase in the actual trend, BRNN seems to be sharply making the turn, as seen in the 75th, 150th, 250th, and 325th-time points. Despite the loss converging and the low final testing MSE loss (0.038199), the results for S\&P 500 in observation are quite unsatisfying. This might be because of the nature of the S\&P 500's trend: there is a very long period of the plateau before sharply increasing and decreasing, which BRNN interprets that whenever there is an increase, it should do so sharply. What is surprising to us is that BRNN works well with the Bitcoin prices data, even though the trend line of Bitcoin is very similar to that of the S\&P 500's, with a period of plateau followed by a series of sharp spikes (see graph)
+        From observing the predicted values versus the actual graph of the S\&P 500 Index for BRNN, we observe equally bad results as that predicted by RNN. The predicted trend line seems to be overestimating decreasing and increasing compared to the actual trend lines, as seen from Fig. 11. As observed, whenever there is a slight decrease or increase in the actual trend, BRNN seems to be sharply making the turn, as seen in the 75th, 150th, 250th, and 325th-time points. Despite the loss converging and the low final testing MSE loss (0.038199), the results for S\&P 500 in observation are quite unsatisfying. This might be because of the nature of the S\&P 500's trend: there is a very long period of the plateau before sharply increasing and decreasing, which BRNN interprets that whenever there is an increase, it should do so sharply. What is surprising to us is that BRNN works well with the Bitcoin prices data, even though the trend line of Bitcoin is very similar to that of the S\&P 500's, with a period of plateau followed by a series of sharp spikes (see graph)
         
         \begin{figure}[thpb]
             \centering
@@ -360,7 +382,16 @@ CSC 240 Final Project
 
     \subsection{GRU}
 
-        For the two artificial datasets, GRU achieved an MSE loss of around 0.0003 on the training set and below 0.01 on the testing set; also achieved an L1 loss around 0.01 on the training set and around 0.03 on the testing set. The two loss functions for both datasets converged within 5 epochs and GRU perfectly caught all the trends and peaks. MSE loss also converged within 5 epochs for the Microsoft stock price dataset; the losses for the training set and testing set are below 0.001. There was some fluctuation for L1 loss, but ultimately it achieved 0.007 for the training dataset and 0.035 for the testing set. The prediction showed some degree of delay especially when it came to the second half of the series. GRU outperformed on the S\&P 500 Index dataset with an MSE loss of near to zero on the training set and 0.002 on the testing set, and the L1 loss confirmed the performance. The prediction did not show any delay and caught every trend and peak (Figure ?), which is very impressive. For the crude oil price dataset, some deviation appeared at the beginning and the end of the series with MSE loss and L1 loss below 0.1. Although both loss functions converged within 10 epochs for the Bitcoin price dataset, using the MSE loss function for backpropagation resulted in a lower loss on both the training set and testing set. It also successfully predicted the extreme peak at the end of the series.
+        For the two artificial datasets, GRU achieved an MSE loss of around 0.0003 on the training set and below 0.01 on the testing set; also achieved an L1 loss around 0.01 on the training set and around 0.03 on the testing set. The two loss functions for both datasets converged within 5 epochs and GRU perfectly caught all the trends and peaks. MSE loss also converged within 5 epochs for the Microsoft stock price dataset; the losses for the training set and testing set are below 0.001. There was some fluctuation for L1 loss, but ultimately it achieved 0.007 for the training dataset and 0.035 for the testing set. The prediction showed some degree of delay especially when it came to the second half of the series. GRU outperformed on the S\&P 500 Index dataset with an MSE loss of near to zero on the training set and 0.002 on the testing set, and the L1 loss confirmed the performance. The prediction did not show any delay and caught every trend and peak (Fig. 13), which is very impressive.
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=8cm]{image/GRU/bitcoin_graph.png}
+            \caption{Predicted values versus actual by GRU on Bitcoin.}
+            \label{figurelabel}
+        \end{figure}
+        
+        For the crude oil price dataset, some deviation appeared at the beginning and the end of the series with MSE loss and L1 loss below 0.1. Although both loss functions converged within 10 epochs for the Bitcoin price dataset, using the MSE loss function for backpropagation resulted in a lower loss on both the training set and testing set. It also successfully predicted the extreme peak at the end of the series.
 
     \subsection{LSTM}
 
