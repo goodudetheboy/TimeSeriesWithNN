@@ -110,7 +110,6 @@ Navigate to [main.ipynb](./src/model/main.ipynb) (the main notebook), install th
 Any kind of enhancement or contribution is welcomed.
 
 # Citation
-Any kind of enhancement or contribution is welcomed.
 ```
 @unpublished{
     mkvhcwcfu2021,
