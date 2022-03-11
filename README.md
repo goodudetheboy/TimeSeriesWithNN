@@ -23,10 +23,11 @@ External libraries:
 
 # Table Of Contents
 -  [Dataset](#dataset)
+-  [Models](#models)
+-  [Run the demo](#run-the-demo)
 -  [In Details](#in-details)
--  [Future Work](#future-work)
--  [Contributing](#contributing)
 -  [Acknowledgments](#acknowledgments)
+-  [License](#license)
 
 # Dataset   
 For this project, we used 6 datasets, 4 real-world datasets including 
@@ -35,7 +36,7 @@ For this project, we used 6 datasets, 4 real-world datasets including
 - [Crude oil prices](https://fred.stlouisfed.org/series/DCOILBRENTEU) (Natural resources)
 - [Bitcoin price](https://www.kaggle.com/sudalairajkumar/cryptocurrencypricehistory) (Cryptocurrency)
 
-along with 2 artificially generated datasets.
+along with 2 artificially generated datasets. Note that we have already generated and put them in [dataset](./dataset/) directory along with the other real-world datasets.
 
 ## Artificical dataset generation 
 To generate an artificial time-series dataset, we
@@ -55,61 +56,57 @@ The following figure displays an example of our algorithm in action.
 
 ![Example of artificial dataste](./docs/adata1_graph.png)
 
+# Models
+We use 4 deep learning models for our analysis here:
+- [Traditional RNN](https://arxiv.org/abs/1808.03314)
+- [Bidirectional RNN](https://ieeexplore.ieee.org/document/650093)
+- [Gated Recurrent Unit](https://arxiv.org/abs/1409.1259) (GRU)
+- [Long Short-Term Memory](https://www.researchgate.net/publication/13853244_Long_Short-term_Memory) (LSTM)
+
+These model implementation are also available in [main.ipynb](./src/model/main.ipynb), along with the training driver file. Although we did not separate them into `.py` file, it can easily be extracted from the appropriate section of the [main.ipynb](./src/model/main.ipynb) notebook.
+
+# Run the demo
+
+Navigate to [main.ipynb](./src/model/main.ipynb) (the main notebook), install the appropriate libraries, and run the notebook. Everything should be printed out along with metadata of the training.
+
+
 # In Details
 ```
-├──  config
-│    └── defaults.py  - here's the default config file.
-│
-│
-├──  configs  
-│    └── train_mnist_softmax.yml  - here's the specific config file for specific model or dataset.
-│ 
-│
-├──  data  
-│    └── datasets  - here's the datasets folder that is responsible for all data handling.
-│    └── transforms  - here's the data preprocess folder that is responsible for all data augmentation.
-│    └── build.py  		   - here's the file to make dataloader.
-│    └── collate_batch.py   - here's the file that is responsible for merges a list of samples to form a mini-batch.
-│
-│
-├──  engine
-│   ├── trainer.py     - this file contains the train loops.
-│   └── inference.py   - this file contains the inference process.
-│
-│
-├── layers              - this folder contains any customed layers of your project.
-│   └── conv_layer.py
-│
-│
-├── modeling            - this folder contains any model of your project.
-│   └── example_model.py
-│
-│
-├── solver             - this folder contains optimizer of your project.
-│   └── build.py
-│   └── lr_scheduler.py
-│   
-│ 
-├──  tools                - here's the train/test model of your project.
-│    └── train_net.py  - here's an example of train model that is responsible for the whole pipeline.
-│ 
-│ 
-└── utils
-│    ├── logger.py
-│    └── any_other_utils_you_need
-│ 
-│ 
-└── tests					- this foler contains unit test of your project.
-     ├── test_data_sampler.py
+├── README.md
+├── dataset                 - Contains datasets, which will be used by the main file
+│   ├── Artificial_trend.csv
+│   ├── Artificial_trend1.csv
+│   ├── coin.csv
+│   ├── microsoft.csv
+│   ├── oil.csv
+│   └── sp500.csv
+├── docs
+│   └── *                   - For this README
+├── paper                   - Main paper along with source tex file
+│   ├── **                  
+│   └── paper.pdf           - Final paper
+├── prospectus         
+│   └── **
+└── src
+    ├── analysis                                - Analysis of dataset
+    │   ├── Artificial_data_analysis.ipynb
+    │   ├── Bitcoin_Oil_data_analysis.ipynb
+    │   └── Microsoft_SP500_data_analysis.ipynb
+    ├── datagen                                 - Algorithmic generation of dataset
+    │   ├── Artificial_series_1.ipynb
+    │   └── Artificial_trend.csv
+    └── model
+        ├── implementation  - Core implementation of RNN models
+        │   ├── GRU.ipynb
+        │   ├── LSTM_wu.ipynb
+        │   ├── biRNN.ipynb
+        │   └── simple RNN.ipynb
+        ├── main.ipynb      - Main notebook, this is where all the magic happens
+        └── train.py        - Training driver
 ```
-
-
-# Future Work
 
 # Contributing
 Any kind of enhancement or contribution is welcomed.
 
-
-# Acknowledgments
-
+# License
 
