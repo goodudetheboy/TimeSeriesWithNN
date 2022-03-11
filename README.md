@@ -1,5 +1,12 @@
 # Time Series Prediction with Recurrent Neural Networks (RNN)
 
+![Results of analysis](./docs/cover.png)
+
+**Time Series Prediction with Recurrent Neural Networks (RNN)**<br>
+Minh Khoi Nguyen Do, Vuong Ho, Chuqin Wu, Qianwen Fu<br>
+
+### [Project Page](https://github.com/goodudetheboy/TimeSeriesWithNN) | [Paper](./paper/paper.pdf) | [Data](#dataset)<br>
+
 Abstract: *We look to apply deep learning techniques in the subject of time series analysis and analyze their performance in this type of task, and possibly compare their accuracy against autoregressive methods, which are algorithms specially developed for time series data. Specifically, we look at whether neural networks can be applied in the financial sectors by using a variety of networks such as bidirectional RNN, GRU, and LSTM to predict future prices of Microsoft stocks, Bitcoin, and similar datasets with varying levels of features. We have also prepared and generated artificial time series datasets that simulate reality to see how deep learning can be applied in this kind of task. We find that all four of the networks we experimented with perform relatively well on our datasets and that some networks perform better at one dataset than the other.*
 
 This project was done as part of Fall 2021 CSC 240 Data Mining @ the University of Rochester.
@@ -15,68 +22,38 @@ External libraries:
 - [scikit-learn](https://scikit-learn.org/) (Machine Learning in Python)
 
 # Table Of Contents
--  [In a Nutshell](#in-a-nutshell)
+-  [Dataset](#dataset)
 -  [In Details](#in-details)
 -  [Future Work](#future-work)
 -  [Contributing](#contributing)
 -  [Acknowledgments](#acknowledgments)
 
-# In a Nutshell   
-In a nutshell here's how to use this template, so **for example** assume you want to implement ResNet-18 to train mnist, so you should do the following:
-- In `modeling`  folder create a python file named whatever you like, here we named it `example_model.py` . In `modeling/__init__.py` file, you can build a function named `build_model` to call your model
+# Dataset   
+For this project, we used 6 datasets, 4 real-world datasets including 
+- [Microsoft stock price](https://www.kaggle.com/vijayvvenkitesh/microsoft-stock-time-series-analysis) (Stock market)
+- [S&P500 Index](https://datahub.io/core/s-and-p-500) (Stock market)
+- [Crude oil prices](https://fred.stlouisfed.org/series/DCOILBRENTEU) (Natural resources)
+- [Bitcoin price](https://www.kaggle.com/sudalairajkumar/cryptocurrencypricehistory) (Cryptocurrency)
 
-```python
-from .example_model import ResNet18
+along with 2 artificially generated datasets.
 
-def build_model(cfg):
-    model = ResNet18(cfg.MODEL.NUM_CLASSES)
-    return model
-``` 
+## Artificical dataset generation 
+To generate an artificial time-series dataset, we
+first used the Pandas package to create a dataframe ranging
+from 2000-01-01 to 2021-12-31, and random numbers generated
+by Numpy were assigned to the dataframe. Then, the
+seasonal decomposition method from statsmodels package
+was applied to the dataframe with a period of 365 days,
+resulting in trend, seasonality, and residual. The trend was
+calculated by moving average with a window length of 365,
+so the first half-year and the last half year will disappear. We
+extracted the trend data as our final artificial dataset since it
+is more similar to the normal financial time-series data. A
+total of 7307 timesteps was generated.
 
-   
-- In `engine`  folder create a model trainer function and inference function. In trainer function, you need to write the logic of the training process, you can use some third-party library to decrease the repeated stuff.
+The following figure displays an example of our algorithm in action.
 
-```python
-# trainer
-def do_train(cfg, model, train_loader, val_loader, optimizer, scheduler, loss_fn):
- """
- implement the logic of epoch:
- -loop on the number of iterations in the config and call the train step
- -add any summaries you want using the summary
- """
-pass
-
-# inference
-def inference(cfg, model, val_loader):
-"""
-implement the logic of the train step
-- run the tensorflow session
-- return any metrics you need to summarize
- """
-pass
-```
-
-- In `tools`  folder, you create the `train.py` .  In this file, you need to get the instances of the following objects "Model",  "DataLoader”, “Optimizer”, and config
-```python
-# create instance of the model you want
-model = build_model(cfg)
-
-# create your data generator
-train_loader = make_data_loader(cfg, is_train=True)
-val_loader = make_data_loader(cfg, is_train=False)
-
-# create your model optimizer
-optimizer = make_optimizer(cfg, model)
-```
-
-- Pass the all these objects to the function `do_train` , and start your training
-```python
-# here you train your model
-do_train(cfg, model, train_loader, val_loader, optimizer, None, F.cross_entropy)
-```
-
-**You will find a template file and a simple example in the model and trainer folder that shows you how to try your first model simply.**
-
+![Example of artificial dataste](./docs/adata1_graph.png)
 
 # In Details
 ```
