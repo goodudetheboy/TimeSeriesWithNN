@@ -3,7 +3,7 @@
 ![Results of analysis](./docs/cover.png)
 
 **Time Series Prediction with Recurrent Neural Networks (RNN)**<br>
-Minh Khoi Nguyen Do, Vuong Ho, Chuqin Wu, Qianwen Fu<br>
+[Minh Khoi Nguyen Do](https://github.com/DiningSystem), [Vuong Ho](https://github.com/goodudetheboy), [Chuqin Wu](https://github.com/chuqinwu), [Qianwen Fu](https://github.com/qfu4)<br>
 
 ### [Project Page](https://github.com/goodudetheboy/TimeSeriesWithNN) | [Paper](./paper/paper.pdf) | [Data](#dataset)<br>
 
