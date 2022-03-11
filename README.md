@@ -26,7 +26,8 @@ External libraries:
 -  [Models](#models)
 -  [Run the demo](#run-the-demo)
 -  [In Details](#in-details)
--  [Acknowledgments](#acknowledgments)
+-  [Contributing](#contributing)
+-  [Citation](#citation)
 -  [License](#license)
 
 # Dataset   
