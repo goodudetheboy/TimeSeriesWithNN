@@ -116,7 +116,6 @@ Any kind of enhancement or contribution is welcomed.
     mkvhcwcfu2021,
     title={Time Series Prediction with Recurrent Neural Networks (RNN)},
     author={Minh Khoi Nguyen Do, Vuong Ho, Chuqin Wu, and Qianwen Fu},
-    booktitle={International Conference on Learning Representations},
     year={2021},
     url={https://github.com/goodudetheboy/TimeSeriesWithNN}
 }
