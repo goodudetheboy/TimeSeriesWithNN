@@ -114,7 +114,7 @@ Any kind of enhancement or contribution is welcomed.
 @unpublished{
     mkvhcwcfu2021,
     title={Time Series Prediction with Recurrent Neural Networks (RNN)},
-    author={Minh Khoi Nguyen Do, Vuong Ho, Chuqin Wu, and Qianwen Fu},
+    author={Minh Khoi Nguyen Do and Vuong Ho and Chuqin Wu and Qianwen Fu},
     year={2021},
     url={https://github.com/goodudetheboy/TimeSeriesWithNN}
 }
